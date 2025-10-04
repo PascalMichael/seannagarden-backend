@@ -5,24 +5,24 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ✅ Serve all static files from the "public" folder
-app.use(express.static(path.join(__dirname, "public")));
+// ✅ Serve all static files from the "frontend" folder
+app.use(express.static(path.join(__dirname, "frontend")));
 
 // ✅ Routes for each page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "about.html"));
+  res.sendFile(path.join(__dirname, "frontend", "about.html"));
 });
 
 app.get("/contact", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "contact.html"));
+  res.sendFile(path.join(__dirname, "frontend", "contact.html"));
 });
 
 app.get("/booking", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "booking.html"));
+  res.sendFile(path.join(__dirname, "frontend", "booking.html"));
 });
 
 // ✅ Handle form submissions (POST requests)
