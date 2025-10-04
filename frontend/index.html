@@ -116,61 +116,81 @@
             <span class="sr-only">Next</span>
             </a>
          </div>
-         <!DOCTYPE html>
-<html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Booking Form</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link rel="stylesheet" type="text/css" href="style.css">
-   </head>
-   <body>
-      <div class="booking_ocline">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-5">
-                  <div class="book_room">
-                     <h1>Online Booking</h1>
-                     <form class="book_now">
-                        <div class="row">
-                           <div class="col-md-12">
-                              <span>Type of Event</span>
-                              <input class="online_book" placeholder="e.g., Wedding, Conference" type="text" name="event_type">
+         <div class="booking_ocline">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-5">
+                     <div class="book_room">
+                        <h1>Online Booking</h1>
+                        <div id="booking-alert"></div>
+                        <form id="bookingForm" class="book_now">
+                           <div class="row">
+                              <div class="col-md-12">
+                                 <span>Type of Event</span>
+                                 <input class="online_book" placeholder="e.g., Wedding, Conference" type="text" name="event_type" required>
+                              </div>
+                              <div class="col-md-12">
+                                 <span>Event Date</span>
+                                 <img class="date_cua" src="images/date.png" alt="Select Date" style="cursor: pointer;" onclick="document.getElementById('event_date').click();">
+                                 <input class="online_book" type="date" name="event_date" id="event_date" required>
+                              </div>
+                              <div class="col-md-12">
+                                 <span>Number of People Attending</span>
+                                 <input class="online_book" type="number" placeholder="e.g., 100" name="attendees" required>
+                              </div>
+                              <div class="col-md-12">
+                                 <span>Phone Number</span>
+                                 <input class="online_book" type="tel" placeholder="e.g., +2551234567890" name="phone_number" required>
+                              </div>
+                              <div class="col-md-12">
+                                 <button class="book_btn" type="submit">Book Now</button>
+                              </div>
                            </div>
-                           <div class="col-md-12">
-                              <span>Event Date</span>
-                              <img class="date_cua" src="images/date.png" alt="Select Date" style="cursor: pointer;" onclick="document.getElementById('event_date').click();">
-                              <input class="online_book" type="date" name="event_date" id="event_date">
-                           </div>
-                           <div class="col-md-12">
-                              <span>Number of People Attending</span>
-                              <input class="online_book" type="number" placeholder="e.g., 100" name="attendees">
-                           </div>
-                           <div class="col-md-12">
-                              <span>Phone Number</span>
-                              <input class="online_book" type="tel" placeholder="e.g., +2551234567890" name="phone_number">
-                           </div>
-                           <div class="col-md-12">
-                              <button class="book_btn" type="submit">Book Now</button>
-                           </div>
-                        </div>
-                     </form>
-                     
+                        </form>
+                     </div>
                      <script>
-                        // Optionally, you could add additional enhancements to the date picker if desired
-                        // For example, you can use flatpickr or other libraries for extra features.
+                     document.addEventListener('DOMContentLoaded', function() {
+                       const form = document.getElementById('bookingForm');
+                       if (form) {
+                         form.addEventListener('submit', async function(e) {
+                           e.preventDefault();
+                           const alertBox = document.getElementById('booking-alert');
+                           alertBox.innerHTML = ""; // Clear previous alerts
+
+                           // Gather form data
+                           const formData = new FormData(form);
+                           const params = new URLSearchParams();
+                           for (const [key, value] of formData.entries()) {
+                             params.append(key, value);
+                           }
+
+                           try {
+                             const response = await fetch('/book', {
+                               method: 'POST',
+                               headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                               body: params
+                             });
+
+                             // Success: Server returns an HTML snippet.
+                             if (response.ok) {
+                               const html = await response.text();
+                               alertBox.innerHTML = '<div class="alert alert-success" role="alert">Booking successful! Thank you.</div>';
+                               form.reset();
+                               form.style.display = 'none';
+                             } else {
+                               alertBox.innerHTML = '<div class="alert alert-danger" role="alert">Booking failed. Please try again.</div>';
+                             }
+                           } catch (err) {
+                             alertBox.innerHTML = '<div class="alert alert-danger" role="alert">Network error. Please check your connection and try again.</div>';
+                           }
+                         });
+                       }
+                     });
                      </script>
-                     
                   </div>
                </div>
             </div>
          </div>
-      </div>
-   </body>
-</html>
-
       </section>
       <!-- end banner -->
       <!-- about -->
@@ -180,7 +200,7 @@
                <div class="col-md-5">
                   <div class="titlepage">
                      <h2>About Us</h2>
-                     <p>"Nestled in the heart of Makongo, Seanna Gardens is an enchanting oasis, inviting guests to embark on a multi-sensory journey. Immerse yourself in beautifully landscaped gardens, a vibrant playground, and a refreshing swimming pool designed for adults and kids alike. Our talented chefs will delight your palate with tantalizing dishes, complemented by a selection of refreshing drinks, in an intimate setting surrounded by lush greenery. Seanna Gardens transforms every occasion into a memorable gathering, whether it's a private celebration or a corporate event. Let our dedicated team meticulously attend to every detail, ensuring an exceptional experience that will create lasting memories. </p>
+                     <p>"Nestled in the heart of Makongo, Seanna Gardens is an enchanting oasis, inviting guests to embark on a multi-sensory journey. Immerse yourself in beautifully landscaped gardens, savor culinary delights, and create lasting memories in the heart of Dar es Salaam. Seanna Gardens – where every moment blooms with beauty and tranquility."</p>
                      <a class="read_more" href="Javascript:void(0)"> Read More</a>
                   </div>
                </div>
@@ -212,7 +232,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>Main Kitchen</h3>
-                        <p>"Savor the flavors of home with our locally-inspired kitchen, serving fresh, seasonal ingredients in a cozy atmosphere. Whether you are craving comfort food or something new, we have got something to delight every palate." </p>
+                        <p>"Savor the flavors of home with our locally-inspired kitchen, serving fresh, seasonal ingredients in a cozy atmosphere. Whether you are craving comfort food or something new, our main kitchen is sure to delight your taste buds."</p>
                      </div>
                   </div>
                </div>
@@ -223,7 +243,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>BBQ Kitchen</h3>
-                        <p>"Indulge in mouth-watering BBQ at our specialized kitchen, where we grill up the finest cuts of meat, juicy vegetables, and savory sides. Perfect for a casual meal with friends or family, our BBQ offerings are packed with smoky, grilled goodness." </p>
+                        <p>"Indulge in mouth-watering BBQ at our specialized kitchen, where we grill up the finest cuts of meat, juicy vegetables, and savory sides. Perfect for a casual meal with friends or family."</p>
                      </div>
                   </div>
                </div>
@@ -234,7 +254,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>Bar</h3>
-                        <p>"Relax and unwind at our vibrant bar lounge, where great drinks, a welcoming atmosphere, and live sports action come together. Enjoy your favorite cocktails, beers, and snacks while watching the big game on our large screens. It’s the perfect spot to socialize, cheer on your team, or simply kick back with friends." </p>
+                        <p>"Relax and unwind at our vibrant bar lounge, where great drinks, a welcoming atmosphere, and live sports action come together. Enjoy your favorite cocktails, beers, and more in good company."</p>
                      </div>
                   </div>
                </div>
@@ -245,7 +265,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>Kids Swimming Pool & Playground</h3>
-                        <p>"Our kid-friendly pool and playground are perfect for little ones to splash around and have fun! With safe, shallow waters and a fun playground to explore, your kids will enjoy hours of entertainment and adventure." </p>
+                        <p>"Our kid-friendly pool and playground are perfect for little ones to splash around and have fun! With safe, shallow waters and a fun playground to explore, your kids will be entertained for hours."</p>
                      </div>
                   </div>
                </div>
@@ -256,7 +276,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>Adults Swimming pool</h3>
-                        <p>"Relax and unwind in our serene adults-only swimming pool, designed for a peaceful and rejuvenating experience. Whether you're swimming laps or simply lounging by the water, it’s your perfect retreat." </p>
+                        <p>"Relax and unwind in our serene adults-only swimming pool, designed for a peaceful and rejuvenating experience. Whether you're swimming laps or simply lounging by the water, our pool offers the perfect escape."</p>
                      </div>
                   </div>
                </div>
@@ -267,7 +287,7 @@
                      </div>
                      <div class="bed_room">
                         <h3>Outdoor Event Space</h3>
-                        <p>"Celebrate life’s special moments at our spacious outdoor event space. Whether it’s a wedding, party, or corporate gathering, our venue offers a beautiful backdrop, flexible setups, and ample room for a memorable event." </p>
+                        <p>"Celebrate life’s special moments at our spacious outdoor event space. Whether it’s a wedding, party, or corporate gathering, our venue offers a beautiful backdrop, ample amenities, and personalized service to make your event truly unforgettable."</p>
                      </div>
                   </div>
                </div>
@@ -337,7 +357,7 @@
                <div class="col-md-12">
                   <div class="titlepage">
                      <h2>Our Staff</h2>
-                     <p>"Our friendly and dedicated staff is here to ensure you have an exceptional experience. From providing attentive service to creating a warm, welcoming environment, our team goes above and beyond to make every visit memorable. Whether you’re here for a meal, a swim, or an event, we’re committed to making you feel right at home." </p>
+                     <p>"Our friendly and dedicated staff is here to ensure you have an exceptional experience. From providing attentive service to creating a warm, welcoming environment, our team is committed to making your visit to Seanna Gardens unforgettable."</p>
                   </div>
                </div>
             </div>
